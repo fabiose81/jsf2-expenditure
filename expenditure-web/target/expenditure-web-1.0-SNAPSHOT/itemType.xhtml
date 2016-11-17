@@ -1,0 +1,51 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:decorate xmlns="http://www.w3.org/1999/xhtml"
+             xmlns:h="http://xmlns.jcp.org/jsf/html"
+             xmlns:p="http://primefaces.org/ui"
+             xmlns:f="http://java.sun.com/jsf/core"
+             xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+             template="template.xhtml">
+
+    <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
+    <h:form>
+        <p:remoteCommand update="formListItemType:panelListItemType" actionListener="#{itemTypeBean.loadItemTypes()}" autoRun="true"/>
+    </h:form>
+
+    <h:form id="formItemType">        
+        <p:panel id="panel" header="Adicionar Categoria" toggleable="true"  toggleSpeed="500"  widgetVar="panel" style="margin-bottom:20px">
+            <div class="content">
+                <div class="control-group">
+                    <label class="control-label">Descrição</label>
+                    <div class="controls">
+                        <p:inputText id="name" required="true" size="50" value="#{itemTypeBean.itemTypeModel.name}"  maxlength="200"/>		
+                    </div>
+                </div>
+            </div>
+
+            <br/>
+            <p:commandButton value="Salvar" update="formItemType"  actionListener="#{itemTypeBean.save()}" styleClass="ui-priority-primary" />
+        </p:panel>        
+    </h:form>
+
+    <h:form id="formListItemType">
+        <p:panel id="panelListItemType" header="Categorias" style="margin-bottom:20px">
+            <p:dataTable var="itemType" id="dataTableItemType" editable="true" value="#{itemTypeBean.itemsType}" selection="#{itemTypeBean.selectedItemTypes}" rowKey="#{itemType.id}"  scrollable="true" scrollHeight="150" rendered="#{itemTypeBean.itemsType != null}">
+                <p:ajax event="rowEdit" listener="#{itemTypeBean.onRowEdit}"/>
+                <p:column selectionMode="multiple" style="width:16px;text-align:center"/>
+                <p:column headerText="Nome" sortBy="#{itemType.name}">
+                    <p:cellEditor>
+                        <f:facet name="output"><h:outputText value="#{itemType.name}" /></f:facet>
+                        <f:facet name="input"><p:inputText id="name" required="true"  value="#{itemType.name}"  maxlength="200"/></f:facet>
+                    </p:cellEditor>                  
+                </p:column>
+                <p:column style="width:64px">
+                    <p:rowEditor />
+                </p:column>
+            </p:dataTable>
+            <br/><br/>
+            <p:commandButton value="Deletar"  update="panelListItemType"  actionListener="#{itemTypeBean.delete()}" styleClass="ui-priority-primary" />
+        </p:panel>
+    </h:form>
+
+</ui:decorate>

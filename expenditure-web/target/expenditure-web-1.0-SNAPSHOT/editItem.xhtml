@@ -1,0 +1,51 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:decorate xmlns="http://www.w3.org/1999/xhtml"
+             xmlns:h="http://xmlns.jcp.org/jsf/html"
+             xmlns:p="http://primefaces.org/ui"
+             xmlns:f="http://java.sun.com/jsf/core"
+             xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+             template="template.xhtml">
+
+    <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
+    <h:form id="formItem">
+            <p:panel id="panel" header="Editar Despesa" toggleable="true"  toggleSpeed="500"  widgetVar="panel" style="margin-bottom:20px">
+                <div class="content">
+                <div class="control-group">
+                    <label class="control-label">Descrição</label>
+                    <div class="controls">
+                        <p:inputText id="name" required="true" size="50" value="#{itemBean.itemModelEdit.name}"  maxlength="200"/>		
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label">Categoria</label>
+                    <div class="controls">
+                        <h:selectOneMenu id="itemType" required="true" value="#{itemBean.itemModelEdit.itemType.id}">
+                            <f:selectItem  itemLabel="Selecione uma categoria" itemValue=""/>
+                            <f:selectItems value="#{itemBean.typeItems}"/>                   
+                        </h:selectOneMenu>               			
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label">Valor</label>
+                    <div class="controls">
+                        <p:inputNumber id="value" required="true" value="#{itemBean.itemModelEdit.value}" symbolPosition="s" decimalSeparator="," thousandSeparator="."/> 			
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label">Data</label>
+                    <div class="controls">
+                        <p:calendar id="date" required="true" value="#{itemBean.itemModelEdit.date}" showOn="button" />		
+                    </div>
+                </div>
+            </div>
+
+                <br/>
+                <p:commandButton value="Salvar"  update="panel"  actionListener="#{itemBean.update()}" styleClass="ui-priority-primary" />
+            </p:panel>        
+    </h:form>
+  
+</ui:decorate>

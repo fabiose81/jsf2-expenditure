@@ -1,0 +1,86 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:decorate xmlns="http://www.w3.org/1999/xhtml"
+             xmlns:h="http://xmlns.jcp.org/jsf/html"
+             xmlns:p="http://primefaces.org/ui"
+             xmlns:f="http://java.sun.com/jsf/core"
+             xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+             template="template.xhtml">
+
+    <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
+    <h:form>
+        <p:remoteCommand update="formItem:itemType" actionListener="#{itemBean.loadTypeItems}" autoRun="true"/>
+    </h:form>
+
+    <h:form>
+        <p:remoteCommand update="formListItem:panelListItem" actionListener="#{itemBean.loadItems()}" autoRun="true"/>
+    </h:form>
+
+    <h:form id="formItem">        
+        <p:panel id="panel" header="Adicionar Despesa" toggleable="true"  toggleSpeed="500"  widgetVar="panel" style="margin-bottom:20px">
+            <div class="content">
+                <div class="control-group">
+                    <label class="control-label">Descrição</label>
+                    <div class="controls">
+                        <p:inputText id="name" required="true" size="50" value="#{itemBean.itemModel.name}"  maxlength="200"/>		
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label">Categoria</label>
+                    <div class="controls">
+                        <h:selectOneMenu id="itemType" required="true" value="#{itemBean.itemModel.itemType.id}">
+                            <f:selectItem  itemLabel="Selecione uma categoria" itemValue=""/>
+                            <f:selectItems value="#{itemBean.typeItems}"/>                   
+                        </h:selectOneMenu>               			
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label">Valor</label>
+                    <div class="controls">
+                        <p:inputNumber id="value" required="true" value="#{itemBean.itemModel.value}" symbolPosition="s" decimalSeparator="," thousandSeparator="."/> 			
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label">Data</label>
+                    <div class="controls">
+                        <p:calendar id="date" required="true" value="#{itemBean.itemModel.date}" showOn="button" />		
+                    </div>
+                </div>
+            </div>
+
+            <br/>
+            <p:commandButton value="Salvar" update="formItem"  actionListener="#{itemBean.save()}" styleClass="ui-priority-primary" />
+        </p:panel>        
+    </h:form>
+
+    <h:form id="formListItem">
+        <p:panel id="panelListItem" header="Despesas" style="margin-bottom:20px">
+            <p:dataTable var="item" id="dataTableItem"  value="#{itemBean.items}" selection="#{itemBean.selectedItems}" rowKey="#{item.id}"  scrollable="true" scrollHeight="150" rendered="#{itemBean.items != null}">
+                <p:column selectionMode="multiple" style="width:16px;text-align:center"/>
+                <p:column headerText="Nome" sortBy="#{item.name}">
+                    <p:commandLink action="#{itemBean.goPageEdit()}">
+                        <h:outputText value="#{item.name}" />
+                        <f:setPropertyActionListener value="#{item}" target="#{itemBean.itemModelEdit}" />
+                    </p:commandLink>
+                </p:column>
+                <p:column headerText="Categoria" sortBy="#{item.itemType.name}">
+                    <h:outputText value="#{item.itemType.name}" />
+                </p:column>
+                <p:column headerText="Valor" sortBy="#{item.value}">
+                    <h:outputText value="#{item.value}" />
+                </p:column>
+                <p:column headerText="Data" sortBy="#{item.date}">
+                    <h:outputText value="#{item.date}">
+                        <f:convertDateTime pattern="dd/MM/yyyy"/>
+                    </h:outputText>
+                </p:column>
+             </p:dataTable>
+            <br/><br/>
+            <p:commandButton value="Deletar"  update="panelListItem"  actionListener="#{itemBean.delete()}" styleClass="ui-priority-primary" />
+        </p:panel>
+    </h:form>
+
+</ui:decorate>

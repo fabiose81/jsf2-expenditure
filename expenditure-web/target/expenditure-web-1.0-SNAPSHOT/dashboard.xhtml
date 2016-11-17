@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:decorate  xmlns="http://www.w3.org/1999/xhtml"
+              xmlns:h="http://xmlns.jcp.org/jsf/html"
+              xmlns:p="http://primefaces.org/ui"
+              xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+              template="template.xhtml">
+
+    <p:fieldset style="margin-top:10px">
+        <h:form>
+            <p:remoteCommand update="formDashboard:panel" actionListener="#{dashboardBean.execute}" autoRun="true"/> 
+        </h:form>
+        <h:form id="formDashboard">
+            <h:panelGrid id="panel" columns="3" cellpadding="5">    
+                <p:chart type="pie" id="d" model="#{dashboardBean.expenditureDaily}" style="width:400px;height:300px" rendered="#{dashboardBean.expenditureDaily != null}"/>
+                <p:chart type="pie" id="m" model="#{dashboardBean.expenditureMonthly}" style="width:400px;height:300px" rendered="#{dashboardBean.expenditureMonthly != null}"/>
+                <p:chart type="pie" id="y" model="#{dashboardBean.expenditureYearly}" style="width:400px;height:300px" rendered="#{dashboardBean.expenditureYearly != null}"/>
+            </h:panelGrid>
+        </h:form>  
+    </p:fieldset>
+
+</ui:decorate>
